@@ -9,8 +9,8 @@ type GameStatus = "playing" | "won" | "lost";
 const INITIAL_LIVES = 10;
 const PAIRS_TO_WIN = 10;
 
-export default function MemoryGame() {
-  const [cards, setCards] = useState<Card[]>(() => createDeck());
+export default function MemoryGame({ initialCards }: { initialCards: Card[] }) {
+  const [cards, setCards] = useState<Card[]>(initialCards);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [matchedIds, setMatchedIds] = useState<number[]>([]);
   const [pendingMismatch, setPendingMismatch] = useState(false);

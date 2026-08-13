@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { createDeck } from "./game";
 import MemoryGame from "./MemoryGame";
 
 export const metadata: Metadata = {
@@ -7,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  return <MemoryGame />;
+  return <MemoryGame initialCards={createDeck()} />;
 }
