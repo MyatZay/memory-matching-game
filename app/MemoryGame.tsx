@@ -36,7 +36,7 @@ export default function MemoryGame({ initialCards }: { initialCards: Card[] }) {
     const handleOutsideClick = (event: PointerEvent) => {
       const target = event.target;
 
-      if (!(target instanceof Element) || !target.closest("[data-memory-card]")) {
+      if (!(target instanceof Element) || !target.closest("[data-memory-card]:not(:disabled)")) {
         setSelectedIds([]);
         setPendingMismatch(false);
       }
