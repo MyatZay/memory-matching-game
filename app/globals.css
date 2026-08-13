@@ -1,0 +1,440 @@
+@import "tailwindcss";
+
+:root {
+  --font-body: "Avenir Next", "Segoe UI", Arial, sans-serif;
+  --font-display: "Trebuchet MS", "Avenir Next", "Segoe UI", sans-serif;
+  --ink: #102f2a;
+  --muted: #64817c;
+  --paper: #f9f7ef;
+  --cream: #ece7da;
+  --green: #124f45;
+  --green-dark: #0a3932;
+  --mint: #a8d5c9;
+  --coral: #ee795e;
+  --gold: #e9b94a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), Arial, sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+.game-page {
+  min-height: 100vh;
+  padding: 28px;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 12% 14%, rgba(168, 213, 201, 0.32) 0 12%, transparent 32%),
+    radial-gradient(circle at 91% 82%, rgba(233, 185, 74, 0.2) 0 10%, transparent 31%),
+    var(--paper);
+}
+
+.game-shell {
+  width: min(100%, 1040px);
+  overflow: hidden;
+  border: 1px solid rgba(16, 47, 42, 0.12);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 28px 80px rgba(16, 47, 42, 0.14);
+  backdrop-filter: blur(12px);
+}
+
+.game-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 34px 42px 27px;
+}
+
+.eyebrow {
+  margin: 0 0 7px;
+  color: var(--coral);
+  font-family: var(--font-display), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 6px;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2rem, 4.3vw, 3.35rem);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.instructions {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.reset-button,
+.result-panel button {
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.reset-button {
+  flex: 0 0 auto;
+  padding: 12px 18px;
+  border: 1px solid rgba(16, 47, 42, 0.15);
+  background: transparent;
+  color: var(--ink);
+}
+
+.reset-button:hover,
+.reset-button:focus-visible {
+  background: var(--cream);
+}
+
+.reset-button:active,
+.result-panel button:active {
+  transform: translateY(2px);
+}
+
+.scoreboard {
+  min-height: 82px;
+  display: grid;
+  grid-template-columns: 112px 1px 112px 1fr;
+  align-items: center;
+  gap: 22px;
+  padding: 15px 42px;
+  background: var(--green);
+  color: white;
+}
+
+.score-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.score-item strong {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.7rem;
+  letter-spacing: -0.04em;
+}
+
+.score-item strong small {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.72rem;
+}
+
+.score-item strong.danger {
+  color: #ffb6a3;
+}
+
+.score-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.score-divider {
+  width: 1px;
+  height: 34px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.status-message {
+  margin: 0;
+  justify-self: end;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.88rem;
+  text-align: right;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(82px, 128px));
+  justify-content: center;
+  gap: 18px;
+  padding: 36px 42px 38px;
+}
+
+.memory-card {
+  width: 100%;
+  aspect-ratio: 0.86;
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  cursor: pointer;
+  perspective: 900px;
+}
+
+.memory-card:disabled {
+  cursor: default;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+  transform-style: preserve-3d;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.memory-card.is-visible .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 16px;
+  backface-visibility: hidden;
+}
+
+.card-back {
+  border: 2px solid var(--green);
+  background:
+    linear-gradient(135deg, transparent 44%, rgba(255, 255, 255, 0.08) 45% 55%, transparent 56%),
+    var(--green);
+  background-size: 22px 22px;
+  box-shadow: 0 8px 0 rgba(10, 57, 50, 0.12);
+  color: var(--mint);
+}
+
+.card-mark {
+  width: 42%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 50%;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 600;
+}
+
+.card-front {
+  border: 2px solid var(--coral);
+  background: #fffaf2;
+  color: var(--coral);
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 700;
+  transform: rotateY(180deg);
+  box-shadow: 0 8px 0 rgba(238, 121, 94, 0.12);
+}
+
+.memory-card.is-matched .card-front {
+  border-color: var(--gold);
+  background: #fff7db;
+  color: var(--ink);
+  box-shadow: 0 8px 0 rgba(233, 185, 74, 0.18);
+}
+
+.match-mark {
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--green);
+  color: white;
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.72rem;
+}
+
+.memory-card:not(:disabled):hover .card-inner,
+.memory-card:not(:disabled):focus-visible .card-inner {
+  transform: translateY(-4px);
+}
+
+.memory-card.is-visible:not(:disabled):hover .card-inner,
+.memory-card.is-visible:not(:disabled):focus-visible .card-inner {
+  transform: translateY(-4px) rotateY(180deg);
+}
+
+.memory-card:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 4px;
+}
+
+.result-panel {
+  margin: 0 42px 28px;
+  padding: 24px 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  border-radius: 20px;
+  background: #e2f0eb;
+}
+
+.result-panel.lost {
+  background: #ffebe5;
+}
+
+.result-panel p {
+  margin-bottom: 4px;
+  color: var(--coral);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.result-panel h2 {
+  margin-bottom: 3px;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.35rem;
+}
+
+.result-panel span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.result-panel button {
+  flex: 0 0 auto;
+  padding: 12px 19px;
+  background: var(--green);
+  color: white;
+}
+
+.result-panel button:hover,
+.result-panel button:focus-visible {
+  background: var(--green-dark);
+  box-shadow: 0 8px 20px rgba(10, 57, 50, 0.2);
+}
+
+.game-footer {
+  min-height: 62px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 14px 42px;
+  border-top: 1px solid rgba(16, 47, 42, 0.1);
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.game-footer > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-card {
+  width: 13px;
+  height: 17px;
+  display: inline-block;
+  border: 1px solid var(--coral);
+  border-radius: 3px;
+  background: #fffaf2;
+}
+
+.legend-card.matched {
+  border-color: var(--gold);
+  background: #fff7db;
+}
+
+.tip {
+  margin-left: auto;
+}
+
+@media (max-width: 680px) {
+  .game-page {
+    align-items: start;
+    padding: 12px;
+  }
+
+  .game-shell {
+    border-radius: 22px;
+  }
+
+  .game-header {
+    padding: 25px 20px 21px;
+  }
+
+  .instructions {
+    max-width: 230px;
+    font-size: 0.8rem;
+  }
+
+  .reset-button {
+    padding: 9px 13px;
+    font-size: 0.78rem;
+  }
+
+  .scoreboard {
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 13px;
+    padding: 13px 20px;
+  }
+
+  .status-message {
+    display: none;
+  }
+
+  .board {
+    grid-template-columns: repeat(4, minmax(52px, 1fr));
+    gap: 10px;
+    padding: 24px 18px 28px;
+  }
+
+  .card-face {
+    border-radius: 11px;
+  }
+
+  .game-footer {
+    padding: 13px 20px;
+  }
+
+  .tip {
+    display: none !important;
+  }
+
+  .result-panel {
+    align-items: flex-start;
+    margin: 0 18px 22px;
+    padding: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-inner,
+  .reset-button,
+  .result-panel button {
+    transition: none;
+  }
+}
